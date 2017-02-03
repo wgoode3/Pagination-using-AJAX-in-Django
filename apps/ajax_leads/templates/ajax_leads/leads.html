@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>leads</title>
+	<style type="text/css">
+		* {
+			font-family: arial, sans-serif;
+		}
+		body {
+			text-align: center;
+		}
+		table {
+			margin: 0 auto;
+    		border-collapse: collapse;
+		}
+
+		td, th {
+    		border: 1px solid #666;
+    		text-align: left;
+    		padding: 8px;
+    		width: 200px;
+		}
+	
+		tr:nth-child(even) {
+    		background-color: #ddd;
+		}
+	</style>
+</head>
+<body>
+
+<h1>leads</h1>
+
+<form action='/search' method='Post'>
+	{% csrf_token %}
+	<input type="text" name='search' placeholder="🔎 Search" id='search'>
+	To: <input type="date" name='to' id='to'>
+	From: <input type="date" name='from' id='from'>	
+</form>
+
+<div id='leads'>
+
+	<p>
+		{% for page in pages %}
+			<a href='/search/{{page}}' class='not_link' id='{{ page }}'>{{ page }}</a>
+			{% if page != pages|length %} | {% endif %}
+		{% endfor %}
+	</p>
+
+	<table>
+		<tr>
+			<th>leads_id</th>
+			<th>first name</th>
+			<th>last name</th>
+			<th>registered date</th>
+			<th>email</th>
+		</tr>
+		{% for lead in leads %}
+			<tr>
+				<td>{{ lead.id }}</td>
+				<td>{{ lead.first_name }}</td>
+				<td>{{ lead.last_name }}</td>
+				<td>{{ lead.register_date }}</td>
+				<td>{{ lead.email }}</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script>
+	$(document).ready(function(){
+		$(".not_link").click(function(event){
+    		event.preventDefault();
+    		var a = $(this).attr('id')
+    		var search = $('#search').serialize();
+			var from = $('#from').serialize();
+			var to = $('#to').serialize();
+    		$.post('/search/'+a, $('form').serialize(), function(res){
+    			$('#leads').html(res);
+    		})
+		});
+	});
+	$(document).on('input', 'form', function(){
+		var search = $('#search').serialize();
+		var from = $('#from').serialize();
+		var to = $('#to').serialize();
+		if(to.length == 13 && from.length == 15){
+			console.log('we have both');
+		}else if(to.length == 13){
+			console.log('we have a to');
+		}else if(from.length == 15){
+			console.log('we have a from');
+		}
+		$.post('/search/0', $('form').serialize(), function(res){
+			$('#leads').html(res);
+		});
+		return false;
+	})
+</script>
+
+</body>
+</html>

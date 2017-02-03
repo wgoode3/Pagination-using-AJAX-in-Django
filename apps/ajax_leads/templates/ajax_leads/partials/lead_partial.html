@@ -1,0 +1,40 @@
+<p>
+	{% for page in pages %}
+		<a href='/search/{{page}}' class='not_link' id='{{ page }}'>{{ page }}</a>
+		{% if page != pages|length %} | {% endif %}
+	{% endfor %}
+</p>
+
+<table>
+	<tr>
+		<th>leads_id</th>
+		<th>first name</th>
+		<th>last name</th>
+		<th>registered date</th>
+		<th>email</th>
+	</tr>
+	{% for lead in leads %}
+		<tr>
+			<td>{{ lead.id }}</td>
+			<td>{{ lead.first_name }}</td>
+			<td>{{ lead.last_name }}</td>
+			<td>{{ lead.register_date }}</td>
+			<td>{{ lead.email }}</td>
+		</tr>
+	{% endfor %}
+</table>
+
+<script>
+$(document).ready(function(){
+	$(".not_link").click(function(event){
+		event.preventDefault();
+		var a = $(this).attr('id')
+		var search = $('#search').serialize();
+		var from = $('#from').serialize();
+		var to = $('#to').serialize();
+		$.post('/search/'+a, $('form').serialize(), function(res){
+			$('#leads').html(res);
+		})
+	});
+})
+</script>

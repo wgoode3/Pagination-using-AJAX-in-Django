@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Leads</title>
+</head>
+<body>
+<h1>New</h1>
+<form action='/create' method='POST'>
+	{% csrf_token %}
+	First Name: <input type='text' name='first_name'><br>
+	Last Name: <input type='text' name='last_name'><br>
+	Registered on: <input type='date' name='register_date'><br>
+	Email: <input type='text' name='email'><br>
+	<input type='submit' value='New Lead'/>
+</form>
+
+<br>
+
+<table border=1>
+	<tr>
+		<th>Name</th><th>Registered on</th><th>Email</th>
+	</tr>
+
+	{% for lead in leads %}
+	<tr>
+		<td>{{ lead.first_name}} {{ lead.last_name }}</td>
+		<td>{{ lead.register_date }}</td>
+		<td>{{ lead.email }}</td>
+	</tr>
+	{% endfor %}
+</table>
+
+</body>
+</html>
