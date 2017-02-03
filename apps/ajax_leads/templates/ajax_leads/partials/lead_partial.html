@@ -1,3 +1,5 @@
+<!-- the leads.html partial -->
+
 <p>
 	{% for page in pages %}
 		<a href='/search/{{page}}' class='not_link' id='{{ page }}'>{{ page }}</a>
@@ -29,9 +31,6 @@ $(document).ready(function(){
 	$(".not_link").click(function(event){
 		event.preventDefault();
 		var a = $(this).attr('id')
-		var search = $('#search').serialize();
-		var from = $('#from').serialize();
-		var to = $('#to').serialize();
 		$.post('/search/'+a, $('form').serialize(), function(res){
 			$('#leads').html(res);
 		})

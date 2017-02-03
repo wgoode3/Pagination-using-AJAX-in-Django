@@ -69,34 +69,26 @@
 
 <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
 <script>
+	
+	// when a user clicks a link of class not_link show the corresponding page of results
 	$(document).ready(function(){
 		$(".not_link").click(function(event){
     		event.preventDefault();
     		var a = $(this).attr('id')
-    		var search = $('#search').serialize();
-			var from = $('#from').serialize();
-			var to = $('#to').serialize();
     		$.post('/search/'+a, $('form').serialize(), function(res){
     			$('#leads').html(res);
     		})
 		});
 	});
+	
+	// when a user starts searching by date or text update the results
 	$(document).on('input', 'form', function(){
-		var search = $('#search').serialize();
-		var from = $('#from').serialize();
-		var to = $('#to').serialize();
-		if(to.length == 13 && from.length == 15){
-			console.log('we have both');
-		}else if(to.length == 13){
-			console.log('we have a to');
-		}else if(from.length == 15){
-			console.log('we have a from');
-		}
 		$.post('/search/0', $('form').serialize(), function(res){
 			$('#leads').html(res);
 		});
 		return false;
 	})
+	
 </script>
 
 </body>
